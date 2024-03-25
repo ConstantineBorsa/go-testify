@@ -17,10 +17,12 @@ func TestMainHandlerWhenCountMoreThanTotal(t *testing.T) {
 	require.NoError(t, err)
 
 	responseRecorder := httptest.NewRecorder()
-	handler := http.HandlerFunc(MainHandle)
+	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
 	// здесь нужно добавить необходимые проверки
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
+
 	assert.Equal(t, totalCount, len(strings.Split(responseRecorder.Body.String(), ",")))
 }
 
@@ -29,10 +31,10 @@ func TestMainHandlerWhenOk(t *testing.T) {
 	require.NoError(t, err)
 
 	responseRecorder := httptest.NewRecorder()
-	handler := http.HandlerFunc(MainHandle)
+	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
-	assert.Equal(t, http.StatusOK, responseRecorder.Code)
+	require.Equal(t, http.StatusOK, responseRecorder.Code)
 
 	assert.NotEmpty(t, responseRecorder.Body.String())
 
@@ -43,12 +45,11 @@ func TestMainHandlerWrongCity(t *testing.T) {
 	require.NoError(t, err)
 
 	responseRecorder := httptest.NewRecorder()
-	handler := http.HandlerFunc(MainHandle)
+	handler := http.HandlerFunc(mainHandle)
 	handler.ServeHTTP(responseRecorder, req)
 
 	assert.Equal(t, http.StatusBadRequest, responseRecorder.Code)
 
-	expectedError := "wrong city value"
-	assert.Contains(t, responseRecorder.Body.String(), expectedError)
+	assert.Contains(t, responseRecorder.Body.String(), "wrong city value")
 
 }

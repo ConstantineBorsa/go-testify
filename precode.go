@@ -6,11 +6,11 @@ import (
 	"strings"
 )
 
-var CafeList = map[string][]string{
+var cafeList = map[string][]string{
 	"moscow": []string{"Мир кофе", "Сладкоежка", "Кофе и завтраки", "Сытый студент"},
 }
 
-func MainHandle(w http.ResponseWriter, req *http.Request) {
+func mainHandle(w http.ResponseWriter, req *http.Request) {
 	countStr := req.URL.Query().Get("count")
 	if countStr == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -27,7 +27,7 @@ func MainHandle(w http.ResponseWriter, req *http.Request) {
 
 	city := req.URL.Query().Get("city")
 
-	cafe, ok := CafeList[city]
+	cafe, ok := cafeList[city]
 	if !ok {
 		w.WriteHeader(http.StatusBadRequest)
 		w.Write([]byte("wrong city value"))
